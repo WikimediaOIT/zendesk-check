@@ -7,7 +7,8 @@ This script uses the Zendesk API to perform a simple search of unassigned unclos
 import argparse
 import os
 import sys
-import requests
+import requests    
+# Note that requests version 2.3.0 work, 0.12.1 does not (something about json handling)
 import simplejson
 
 # REST API endpoint
@@ -20,9 +21,9 @@ DEBUG=False
 
 # Parse command line options
 parser = argparse.ArgumentParser(description="Simple Zendesk API Query")
-parser.add_argument('-u', '--user', 
+parser.add_argument('-u', '--user',
     help='User name for API access - can also be an environment variable - ZENDESK_API_USER')
-parser.add_argument('-t', '--token', 
+parser.add_argument('-t', '--token',
     help='API Token - can also be read as an environment variable - ZENDESK_API_TOKEN')
 args = parser.parse_args()
 
@@ -34,6 +35,8 @@ if args.user is None and os.environ.get('ZENDESK_API_USER'):
 elif args.user is None:
     print 'ERROR: API user not given'
     parser.print_help()
+    sys.exit(2)
+
 
 if args.token is None and os.environ.get('ZENDESK_API_TOKEN'):
     args.token = os.environ.get('ZENDESK_API_TOKEN')
