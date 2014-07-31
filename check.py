@@ -87,7 +87,11 @@ if r.json()['count'] == 1:
     ticket=r.json()['results'][0]
     if DEBUG:
             print simplejson.dumps(ticket, sort_keys=True, indent=4)
-    print 'From:    ', ticket['via']['source']['from']['name']
+    print 'From:    ', 
+    try:
+        print ticket['via']['source']['from']['name']
+    except:
+        print 'Error parsing from address'
     print 'Subject: ', ticket['subject']
     print 'Ticket:   https://wmf.zendesk.com/agent/#/tickets/%s' % (ticket['id'])
 
@@ -97,7 +101,11 @@ elif r.json()['count'] > 1:
         print '-'*80
         if DEBUG:
             print simplejson.dumps(ticket, sort_keys=True, indent=4)
-        print 'From:    ', ticket['via']['source']['from']['name']
+        print 'From:    ', 
+        try:
+                print ticket['via']['source']['from']['name']
+        except:
+                print 'Error parsing from address'
         print 'Subject: ', ticket['subject']
         print 'Ticket:   https://wmf.zendesk.com/agent/#/tickets/%s' % (ticket['id'])
 
