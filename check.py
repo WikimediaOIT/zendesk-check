@@ -1,20 +1,33 @@
 #!/usr/bin/python
 
 """
-This script uses the Zendesk API to perform a simple search of unassigned unclosed open tickets.
+This script uses the Zendesk API [1] to perform a simple search of unassigned unclosed open tickets.
+
+1. http://developer.zendesk.com/documentation/rest_api/introduction.html
 """
 
+import platform
 import argparse
 import os
 import sys
+
 import requests    
 # Note that requests version 2.3.0 work, 0.12.1 does not (something about json handling)
-import simplejson
+import simplejson # only used for debug
+import subprocess
 
 # REST API endpoint
 baseurl = 'https://wmf.zendesk.com/api/v2'
 query   = 'type:ticket+assignee:none+status<closed'
 fullurl = '%s/search.json?query=%s' % (baseurl, query)
+
+# Choose a different action based on OS
+if 'Darwin' in platform.system():
+    action = '/usr/bin/say ticket time'
+elif 'Linux' in platform.system():
+    action = '/usr/bin/mpg123 NiceGong.mp3'
+else:
+    action = 'echo nope'
 
 # Enable debugging for more output
 DEBUG=False
@@ -87,4 +100,8 @@ elif r.json()['count'] > 1:
         print 'From:    ', ticket['via']['source']['from']['name']
         print 'Subject: ', ticket['subject']
         print 'Ticket:   https://wmf.zendesk.com/agent/#/tickets/%s' % (ticket['id'])
+
+# Set up action rule
+if r.json()['count'] > 0:
+        subprocess.call(action, shell=True)
 
