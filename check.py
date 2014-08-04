@@ -11,19 +11,19 @@ import argparse
 import os
 import sys
 
-import requests    
+import requests
 # Note that requests version 2.3.0 work, 0.12.1 does not (something about json handling)
 import simplejson # only used for debug
 import subprocess
 
 # REST API endpoint
 baseurl = 'https://wmf.zendesk.com/api/v2'
-query   = 'type:ticket+assignee:none+status<closed'
+query   = 'type:ticket+assignee:none+status<closed+group:none'
 fullurl = '%s/search.json?query=%s' % (baseurl, query)
 
 # Choose a different action based on OS
 if 'Darwin' in platform.system():
-    action = '/usr/bin/say ticket time'
+    action = '/usr/bin/say hi'
 elif 'Linux' in platform.system():
     action = '/usr/bin/mpg123 NiceGong.mp3'
 else:
@@ -87,7 +87,7 @@ if r.json()['count'] == 1:
     ticket=r.json()['results'][0]
     if DEBUG:
             print simplejson.dumps(ticket, sort_keys=True, indent=4)
-    print 'From:    ', 
+    print 'From:    ',
     try:
         print ticket['via']['source']['from']['name']
     except:
@@ -101,7 +101,7 @@ elif r.json()['count'] > 1:
         print '-'*80
         if DEBUG:
             print simplejson.dumps(ticket, sort_keys=True, indent=4)
-        print 'From:    ', 
+        print 'From:    ',
         try:
                 print ticket['via']['source']['from']['name']
         except:
